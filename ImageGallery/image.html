@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Gallery</title>
+
+<style>
+/* Basic Page Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: #f5e6d3; /* LIGHT BROWN BACKGROUND */
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Filter Buttons */
+.filters {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.filters button {
+    padding: 10px 18px;
+    margin: 5px;
+    cursor: pointer;
+    border: none;
+    background: #444;
+    color: white;
+    border-radius: 6px;
+    transition: background 0.3s ease;
+}
+
+.filters button:hover {
+    background: #222;
+}
+
+/* Gallery Grid */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+}
+
+/* Gallery Images */
+.gallery img {
+    width: 100%;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery img:hover {
+    transform: scale(1.06);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* Lightbox Overlay */
+.lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Large Image in Lightbox */
+.lightbox img {
+    max-width: 90%;
+    max-height: 85%;
+    border-radius: 10px;
+}
+
+/* Navigation Buttons */
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 50%;
+    opacity: 0.8;
+    transition: 0.3s ease;
+}
+
+.nav-btn:hover {
+    opacity: 1;
+}
+
+#prev { left: 30px; }
+#next { right: 30px; }
+
+#close {
+    top: 20px;
+    right: 20px;
+    transform: none;
+    font-size: 20px;
+}
+</style>
+</head>
+<body>
+
+<h1>Image Gallery</h1>
+
+<!-- Filters -->
+<div class="filters">
+    <button onclick="filterImages('all')">All</button>
+    <button onclick="filterImages('nature')">Nature</button>
+    <button onclick="filterImages('paintings')">Paintings</button>
+    <button onclick="filterImages('drawing')">Drawing</button>
+    <button onclick="filterImages('school')">School</button>
+</div>
+
+<!-- Gallery -->
+<div class="gallery" id="gallery">
+    <img src="image/pic1.webp" data-category="drawing">
+    <img src="image/pic12.jpeg" data-category="school">
+    <img src="image/pic2.jpg" data-category="drawing">
+    <img src="image/pic9.jpg" data-category="nature">
+    <img src="image/pic3.jpg" data-category="drawing">
+    <img src="image/pic4.jpeg" data-category="drawing">
+    <img src="image/pic6.jpg" data-category="paintings">
+    <img src="image/pic5.webp" data-category="drawing">
+    <img src="image/pic13.avif" data-category="school">
+    <img src="image/pic7.webp" data-category="paintings">
+    <img src="image/pic10.jpg" data-category="nature">
+    <img src="image/pic8.jpg" data-category="paintings">
+    <img src="image/pic14.jpeg" data-category="school">
+    <img src="image/pic11.jpg" data-category="nature">
+    <img src="image/pic15.jpg" data-category="school">
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+    <button id="close" class="nav-btn" onclick="closeLightbox()">X</button>
+    <button id="prev" class="nav-btn" onclick="prevImg()">&#10094;</button>
+    <img id="lightboxImg">
+    <button id="next" class="nav-btn" onclick="nextImg()">&#10095;</button>
+</div>
+
+<script>
+const images = document.querySelectorAll(".gallery img");
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightboxImg");
+let currentIndex = 0;
+
+// Open Lightbox
+images.forEach((img, index) => {
+    img.addEventListener("click", () => {
+        currentIndex = index;
+        lightboxImg.src = img.src;
+        lightbox.style.display = "flex";
+    });
+});
+
+// Next Image
+function nextImg() {
+    currentIndex = (currentIndex + 1) % images.length;
+    lightboxImg.src = images[currentIndex].src;
+}
+
+// Previous Image
+function prevImg() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    lightboxImg.src = images[currentIndex].src;
+}
+
+// Close Lightbox
+function closeLightbox() {
+    lightbox.style.display = "none";
+}
+
+// Filter by Category
+function filterImages(category) {
+    images.forEach(img => {
+        if (category === "all" || img.dataset.category === category) {
+            img.style.display = "block";
+        } else {
+            img.style.display = "none";
+        }
+    });
+}
+</script>
+
+</body>
+</html>
